@@ -1,0 +1,9 @@
+#+title: raw-data-rtd
+#+author: Joe Meyer, Emma Griffin, GreaterDenverTransit
+
+(Static GTFS Feeds) and (Ridership by Trip and Stop) for RTD network
+
+* Getting started
+** Setting up database
+** Setting up server
+** Setting up frontend
