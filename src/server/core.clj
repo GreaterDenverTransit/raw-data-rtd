@@ -15,13 +15,13 @@
 
   (start)
 
-  @(client/get "http://127.0.0.1:8080/")
-  ;; => {:opts {:method :get, :url "http://127.0.0.1:8080/"},
-  ;;     :body "Pew pew!",
-  ;;     :headers
-  ;;     {:content-length "8",
-  ;;      :content-type "text/html",
-  ;;      :date "Sun, 2 Feb 2025 04:13:36 GMT",
-  ;;      :server "http-kit"},
-  ;;     :status 200}
-)
+  @(client/get "http://127.0.0.1:8080/health")
+  ;; =>
+  {:opts   {:method :get, :url "http://127.0.0.1:8080/health"},
+   :body   "",
+   :headers
+   {:content-length "0",
+    :content-type   "text/json",
+    :date           "Sun, 2 Feb 2025 04:56:05 GMT",
+    :server         "http-kit"},
+   :status 200})
