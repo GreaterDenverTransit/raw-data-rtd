@@ -7,4 +7,13 @@
   ;; SQL(ite)
   org.clojure/java.jdbc            {:mvn/version "0.7.12"}
   org.xerial/sqlite-jdbc           {:mvn/version "3.48.0.0"}
-  com.github.seancorfield/honeysql {:mvn/version "2.6.1270"}}}
+  com.github.seancorfield/honeysql {:mvn/version "2.6.1270"}
+  ;; config
+  aero/aero                        {:mvn/version "1.1.6"}}
+
+ :paths
+ [:clj-paths :resource-paths]
+
+ :aliases
+ {:clj-paths      ["src"]
+  :resource-paths ["resources"]}}
