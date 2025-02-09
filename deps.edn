@@ -16,4 +16,6 @@
 
  :aliases
  {:clj-paths      ["src"]
+  :test           {:extra-paths ["test"]
+                   :extra-deps  {circleci/bond {:mvn/version "0.6.0"}}}
   :resource-paths ["resources"]}}
