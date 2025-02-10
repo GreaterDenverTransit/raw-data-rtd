@@ -8,7 +8,7 @@ jobs:
       - image: cimg/clojure:1.11.1
     steps:
       - checkout
-      - run: clj -M:test
+      - run: clojure -M:test
 
 # Orchestrate jobs using workflows
 # See: https://circleci.com/docs/workflows/ & https://circleci.com/docs/configuration-reference/#workflows
