@@ -1,5 +1,5 @@
 {:deps
- {org.clojure/clojure              {:mvn/version "1.12.0"}
+ {org.clojure/clojure              {:mvn/version "1.11.1"}
   ;; routing
   compojure/compojure              {:mvn/version "1.7.1"}
   ;; server/client
