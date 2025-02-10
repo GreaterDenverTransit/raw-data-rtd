@@ -5,7 +5,7 @@ version: 2.1
 jobs:
   build-and-test:
     docker:
-      - image: cimg/clojure:1.12.0
+      - image: cimg/clojure:1.11.1
     steps:
       - checkout
       - run: clj -M:test
