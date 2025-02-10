@@ -16,7 +16,9 @@
 
  :aliases
  {:clj-paths      ["src"]
-  :test           {:extra-paths ["test"]
-                   :extra-deps  {circleci/bond  {:mvn/version "0.6.0"}
-                                 ring/ring-mock {:mvn/version "0.4.0"}}
+  :test           {:main-opts   ["-m" "kaocha.runner"]
+                   :extra-paths ["test"]
+                   :extra-deps  {circleci/bond       {:mvn/version "0.6.0"}
+                                 lambdaisland/kaocha {:mvn/version "1.91.1392"}
+                                 ring/ring-mock      {:mvn/version "0.4.0"}}
   :resource-paths ["resources"]}}}
