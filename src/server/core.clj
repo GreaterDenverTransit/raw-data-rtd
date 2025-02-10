@@ -6,8 +6,9 @@
 (defn start
   "Initialize server"
   [& _args]
-  (let [port (parse-long (or (System/getenv "PORT") "8080"))]
-    (println (str "Running webserver at http://127.0.0.1:" port "/"))
+  (let [address (or (System/getenv "ADDRESS") "http://127.0.0.1")
+        port (parse-long (or (System/getenv "PORT") "8080"))]
+    (println (str "Running webserver at " address ":" port "/"))
     (server/run-server #'routes/app-routes {:port port})))
 
 (comment

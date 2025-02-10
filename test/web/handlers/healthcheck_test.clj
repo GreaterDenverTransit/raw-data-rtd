@@ -1,5 +1,12 @@
 (ns web.handlers.healthcheck-test
   (:require [web.handlers.healthcheck :as sut]
-            [bond.james :as bond]
-            [clojure.test :as t]
-            [compojure.core :refer [GET]]))
+            [clojure.test :refer [deftest is testing]]
+            [ring.mock.request :as mock]))
+
+
+(deftest healthcheck-test
+  (testing "Healthcheck endpoint works"
+    (is (= (sut/handler (mock/request :get "/health"))
+           {:status 200
+            :headers {"Content-Type" "text/json"}
+            :body    {}}))))
