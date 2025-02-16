@@ -2,4 +2,14 @@
   (:require [aero.core :as aero]
             [clojure.java.io :as io]))
 
-(aero/read-config (io/resource "config.edn"))
+(defn config
+  []
+  (aero/read-config (io/resource "config.edn")))
+
+;; DB
+(defn db [] (:db (config)))
+
+;; Server
+(defn server [] (:server (config)))
+(defn address [] (:address (server)))
+(defn port [] (:port (server)))

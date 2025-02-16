@@ -16,14 +16,15 @@
  [:clj-paths :resource-paths]
 
  :aliases
- {:clj-paths ["src"]
-  :test      {:exec-fn        kaocha.runner/exec-fn
-              :extra-paths    ["test"]
-              :extra-deps     {;; test stubbing/mocking
-                               circleci/bond          {:mvn/version "0.6.0"}
-                               ring/ring-mock         {:mvn/version "0.4.0"}
-                               ;; test running
-                               lambdaisland/kaocha    {:mvn/version "1.91.1392"}
-                               ;; debug/logging
-                               hashp/hashp            {:mvn/version "0.2.2"}}
-              :resource-paths ["resources"]}}}
+ {:clj-paths      ["src"]
+  :resource-paths ["resources"]
+  :test           {:exec-fn        kaocha.runner/exec-fn
+                   :extra-paths    ["test"]
+                   :extra-deps     {;; test stubbing/mocking
+                                    circleci/bond       {:mvn/version "0.6.0"}
+                                    ring/ring-mock      {:mvn/version "0.4.0"}
+                                    ;; test running
+                                    lambdaisland/kaocha {:mvn/version "1.91.1392"}
+                                    ;; debug/logging
+                                    hashp/hashp         {:mvn/version "0.2.2"}}
+                   :resource-paths ["resources"]}}}

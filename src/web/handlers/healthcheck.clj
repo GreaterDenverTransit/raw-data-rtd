@@ -1,7 +1,7 @@
 (ns web.handlers.healthcheck)
 
 (defn handler
-  [_req]
+  [_args]
   {:status  200
    :headers {"Content-Type" "text/json"}
    :body    {}})
