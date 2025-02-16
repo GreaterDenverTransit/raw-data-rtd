@@ -5,9 +5,8 @@
             [org.httpkit.server :as server]
             [ring.middleware.keyword-params :as rmkp]
             [ring.middleware.params :as rmp]
-            [routes.core :as routes]))
-
-(defonce server (atom nil))
+            [routes.core :as routes]
+            [server.state :as state]))
 
 (defn start-server!
   "Initialize server"
@@ -16,7 +15,7 @@
         port (parse-long (or port (config/port)))]
     (println (str "Running webserver at " address ":" port "/"))
     (reset!
-     server
+     state/server
      (server/run-server
       (-> #'routes/app-routes rmkp/wrap-keyword-params rmp/wrap-params)
       {:legacy-return-value? false
@@ -26,10 +25,9 @@
 (defn stop-server!
   "Halt server"
   ([]
-   (when @server
-     (prn @server)
-     (and (stop-server! @server)
-          (reset! server nil))))
+   (when @state/server
+     (and (stop-server! @state/server)
+          (reset! state/server nil))))
   ([server]
    (println "Stopping webserver")
    (server/server-stop! server)))
@@ -44,7 +42,7 @@
 (defn- server-info
   "Debug fn for displaying basic data about `server`"
   ([]
-   (server-info @server))
+   (server-info @state/server))
   ([server]
    (if (instance? org.httpkit.server.HttpServer server)
      {:is-alive? (.isAlive ^org.httpkit.server.HttpServer server)
@@ -73,7 +71,7 @@
    :status 200}
 
   ;; check status
-  (server-info @server)
+  (server-info @state/server)
   ;; =>
   {:is-alive? true
    :port      8080
