@@ -1,4 +1,10 @@
-{;; DB
- :db-classname "org.sqlite.JDBC"
- :subprotocol  "sqlite"
- :subname #or [#env DB_SRC "resources/db/db.db"]}
+{;; Server
+ :server
+ {:address #or [#env ADDRESS "0.0.0.0"]
+  :port    #or [#env PORT "8080"]}
+
+ ;; DB
+ :db
+ {:classname    "org.sqlite.JDBC"
+  :subprotocol  "sqlite"
+  :subname      #or [#env DB_SRC "resources/db/db.db"]}}

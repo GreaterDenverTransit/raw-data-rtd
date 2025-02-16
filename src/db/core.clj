@@ -1,13 +1,10 @@
 (ns db.core
-  (:require [clojure.java.jdbc :as jdbc]
+  (:require [config.core :as config]
+            [clojure.java.jdbc :as jdbc]
             [honey.sql :as sql]))
 
 ;; TODO: Add connection pools
-;; TODO: Move to config.edn
-(def db
-  {:classname   "org.sqlite.JDBC"
-   :subprotocol "sqlite"
-   :subname     "resources/db/RTD_Ridership_v0_12.7.2024.db"})
+(def db (config/db))
 
 (defn select
   [db hsql]
