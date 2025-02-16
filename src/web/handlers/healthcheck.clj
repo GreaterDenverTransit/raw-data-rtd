@@ -1,7 +1,20 @@
-(ns web.handlers.healthcheck)
+(ns web.handlers.healthcheck
+  (:require [server.state :as state]
+            [web.status :as status]))
+
+(defn healthy?
+  [{:keys [is-alive? port status]}]
+  (and is-alive?
+       (number? port)
+       (pos? port)
+       (= :running status)))
 
 (defn handler
   [_args]
-  {:status  200
-   :headers {"Content-Type" "text/json"}
-   :body    {}})
+  (if (healthy? (state/server-info @state/server))
+    {:status  status/okay
+     :headers {"Content-Type" "text/json"}
+     :body    {}}
+    {:status  status/service-unavailable
+     :headers {"Content-Type" "text/json"}
+     :body    {}}))

@@ -1,13 +1,11 @@
 (ns server.core
   (:gen-class)
-  (:require [clojure.string :as str]
-            [config.core :as config]
+  (:require [config.core :as config]
             [org.httpkit.server :as server]
             [ring.middleware.keyword-params :as rmkp]
             [ring.middleware.params :as rmp]
-            [routes.core :as routes]))
-
-(defonce server (atom nil))
+            [routes.core :as routes]
+            [server.state :as state]))
 
 (defn start-server!
   "Initialize server"
@@ -16,7 +14,7 @@
         port (parse-long (or port (config/port)))]
     (println (str "Running webserver at " address ":" port "/"))
     (reset!
-     server
+     state/server
      (server/run-server
       (-> #'routes/app-routes rmkp/wrap-keyword-params rmp/wrap-params)
       {:legacy-return-value? false
@@ -26,10 +24,9 @@
 (defn stop-server!
   "Halt server"
   ([]
-   (when @server
-     (prn @server)
-     (and (stop-server! @server)
-          (reset! server nil))))
+   (when @state/server
+     (and (stop-server! @state/server)
+          (reset! state/server nil))))
   ([server]
    (println "Stopping webserver")
    (server/server-stop! server)))
@@ -40,19 +37,6 @@
   (println "Resetting webserver")
   (stop-server!)
   (start-server! args))
-
-(defn- server-info
-  "Debug fn for displaying basic data about `server`"
-  ([]
-   (server-info @server))
-  ([server]
-   (if (instance? org.httpkit.server.HttpServer server)
-     {:is-alive? (.isAlive ^org.httpkit.server.HttpServer server)
-      :port      (.getPort ^org.httpkit.server.HttpServer server)
-      :status    (-> (.getStatus ^org.httpkit.server.HttpServer server) str/lower-case keyword)}
-     {:is-alive? false
-      :port      nil
-      :status    nil})))
 
 (comment
   (require '[org.httpkit.client :as client])
@@ -73,7 +57,7 @@
    :status 200}
 
   ;; check status
-  (server-info @server)
+  (state/server-info @state/server)
   ;; =>
   {:is-alive? true
    :port      8080
