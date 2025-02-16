@@ -11,7 +11,7 @@
 
 (defn handler
   [_args]
-  (if (healthy? state/server)
+  (if (healthy? (state/server-info @state/server))
     {:status  status/okay
      :headers {"Content-Type" "text/json"}
      :body    {}}

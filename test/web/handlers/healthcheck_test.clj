@@ -9,10 +9,10 @@
 (deftest healthcheck-success-test
   (testing "Healthcheck endpoint returns 200 when server is healthy"
     (server/start-server!)
-    (is (= (sut/handler (mock/request :get "/health"))
-           {:status  200
+    (is (= {:status  200
             :headers {"Content-Type" "text/json"}
-            :body    {}}))
+            :body    {}}
+           (sut/handler (mock/request :get "/health"))))
     (server/stop-server!)))
 
 (deftest healthcheck-failure-test
@@ -21,46 +21,46 @@
                                     :headers {"Content-Type" "text/json"}
                                     :body    {}}]
     (testing "not started"
-      (is (= (sut/handler (mock/request :get "/health"))
-             service-unavailable-resp)))
+      (is (= service-unavailable-resp
+             (sut/handler (mock/request :get "/health")))))
     (testing "not alive"
       (reset! state/server {:is-alive? false
                             :port      8080
                             :status    :running})
-      (is (= (sut/handler (mock/request :get "/health"))
-             service-unavailable-resp)))
+      (is (= service-unavailable-resp
+             (sut/handler (mock/request :get "/health")))))
     (testing "missing port"
       (reset! state/server {:is-alive? true
                             :port      nil
                             :status    :running})
-      (is (= (sut/handler (mock/request :get "/health"))
-             service-unavailable-resp)))
+      (is (= service-unavailable-resp
+             (sut/handler (mock/request :get "/health")))))
     (testing "has invalid port"
       (reset! state/server {:is-alive? true
                             :port      -5
                             :status    :running})
-      (is (= (sut/handler (mock/request :get "/health"))
-             service-unavailable-resp)))
+      (is (= service-unavailable-resp
+             (sut/handler (mock/request :get "/health")))))
     (testing "has stopped"
       (server/start-server!)
       (server/stop-server!)
-      (is (= (sut/handler (mock/request :get "/health"))
-             service-unavailable-resp))
+      (is (= service-unavailable-resp
+             (sut/handler (mock/request :get "/health"))))
 
       (reset! state/server {:is-alive? true
                             :port      8080
                             :status    :stopped})
-      (is (= (sut/handler (mock/request :get "/health"))
-             service-unavailable-resp)))
+      (is (= service-unavailable-resp
+             (sut/handler (mock/request :get "/health")))))
     (testing "is stopping"
       (reset! state/server {:is-alive? true
                             :port      8080
                             :status    :stopping})
-      (is (= (sut/handler (mock/request :get "/health"))
-             service-unavailable-resp)))
+      (is (= service-unavailable-resp
+             (sut/handler (mock/request :get "/health")))))
     (testing "missing status"
       (reset! state/server {:is-alive? true
                             :port      8080
                             :status    nil})
-      (is (= (sut/handler (mock/request :get "/health"))
-             service-unavailable-resp))))))
+      (is (= service-unavailable-resp
+             (sut/handler (mock/request :get "/health"))))))))

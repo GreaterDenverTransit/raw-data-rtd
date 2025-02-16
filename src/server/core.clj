@@ -1,7 +1,6 @@
 (ns server.core
   (:gen-class)
-  (:require [clojure.string :as str]
-            [config.core :as config]
+  (:require [config.core :as config]
             [org.httpkit.server :as server]
             [ring.middleware.keyword-params :as rmkp]
             [ring.middleware.params :as rmp]
@@ -39,19 +38,6 @@
   (stop-server!)
   (start-server! args))
 
-(defn- server-info
-  "Debug fn for displaying basic data about `server`"
-  ([]
-   (server-info @state/server))
-  ([server]
-   (if (instance? org.httpkit.server.HttpServer server)
-     {:is-alive? (.isAlive ^org.httpkit.server.HttpServer server)
-      :port      (.getPort ^org.httpkit.server.HttpServer server)
-      :status    (-> (.getStatus ^org.httpkit.server.HttpServer server) str/lower-case keyword)}
-     {:is-alive? false
-      :port      nil
-      :status    nil})))
-
 (comment
   (require '[org.httpkit.client :as client])
 
@@ -71,7 +57,7 @@
    :status 200}
 
   ;; check status
-  (server-info @state/server)
+  (state/server-info @state/server)
   ;; =>
   {:is-alive? true
    :port      8080
