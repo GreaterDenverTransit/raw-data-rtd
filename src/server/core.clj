@@ -2,6 +2,7 @@
   (:gen-class)
   (:require [config.core :as config]
             [org.httpkit.server :as server]
+            [ring.middleware.json :as rmj]
             [ring.middleware.keyword-params :as rmkp]
             [ring.middleware.params :as rmp]
             [routes.core :as routes]
@@ -16,7 +17,10 @@
     (reset!
      state/server
      (server/run-server
-      (-> #'routes/app-routes rmkp/wrap-keyword-params rmp/wrap-params)
+      (-> #'routes/app-routes
+          rmkp/wrap-keyword-params
+          rmp/wrap-params
+          rmj/wrap-json-response)
       {:legacy-return-value? false
        :ip                   address
        :port                 port}))))

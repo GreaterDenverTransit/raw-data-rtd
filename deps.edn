@@ -1,5 +1,9 @@
 {:deps
  {org.clojure/clojure              {:mvn/version "1.11.1"}
+  ;; control flow
+  rop/rop                          {:mvn/version "0.4.1"}
+  ;; encoding/decoding
+  metosin/jsonista                 {:mvn/version "0.3.13"}
   ;; routing
   compojure/compojure              {:mvn/version "1.7.1"}
   ;; server/client

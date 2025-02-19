@@ -5,7 +5,8 @@
             [server.core :as server]
             [server.state :as state]))
 
-
+;; NOTE: These tests may become flaky if run in parallel due to shared server
+;; atom
 (deftest healthcheck-success-test
   (testing "Healthcheck endpoint returns 200 when server is healthy"
     (server/start-server!)

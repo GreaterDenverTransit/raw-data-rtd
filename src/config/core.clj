@@ -13,3 +13,6 @@
 (defn server [] (:server (config)))
 (defn address [] (:address (server)))
 (defn port [] (:port (server)))
+
+;; Defaults
+(defn default-count [] (:default-count (config)))
