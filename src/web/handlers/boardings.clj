@@ -31,8 +31,8 @@
                        (ex-info "Boardings could not be returned"
                                 {:status status/internal-server-error}))))))
 
-;; TODO: Add context map interceptor
 (defn handler
   [req]
-  (rop/>>= (assoc req :ctx {})
-           =boardings=))
+  ;; TODO: Add context map interceptor
+  (resp (rop/>>= (assoc req :ctx {})
+                 =boardings=)))
