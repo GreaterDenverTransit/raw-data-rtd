@@ -1,10 +1,30 @@
-(ns domain.boardings)
+(ns domain.boardings
+  (:require [db.boardings :as boardings-db]
+            [honey.sql :as sql]))
+
+(defn coerce-date
+  "Strips `date` of its \"part of week\" section to make filtering easier"
+  [date]
+  (subs date 0 5))
+
+(defn coerce-count
+  "Ensures `count'` is a long"
+  [count']
+  (if (number? count')
+    count'
+    (parse-long count')))
 
 (defn top-n
-  [count' start-date end-date])
+  [count' start-date end-date]
+  (boardings-db/top-n (coerce-count count')
+                      (coerce-date start-date)
+                      (coerce-date end-date)))
 
 (defn bottom-n
-  [count' start-date end-date])
+  [count' start-date end-date]
+  (boardings-db/bottom-n (coerce-count count')
+                         (coerce-date start-date)
+                         (coerce-date end-date)))
 
 (defn- asc?
   "True iff `order` should be ascending"
