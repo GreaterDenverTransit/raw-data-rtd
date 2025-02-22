@@ -1,18 +1,20 @@
 (ns db.core
   (:require [config.core :as config]
-            [clojure.java.jdbc :as jdbc]
+            [next.jdbc :as jdbc]
+            [next.jdbc.result-set :as rs]
             [honey.sql :as sql]))
 
 ;; TODO: Add connection pools
-(def db (config/db))
+(def db (jdbc/get-datasource (config/db)))
 
-(defn select
+(defn execute!
   [db hsql]
-  (jdbc/query db
-              (sql/format hsql)))
+  (jdbc/execute!
+   (jdbc/with-options db {:builder-fn rs/as-unqualified-kebab-maps})
+   #p (sql/format hsql)))
 
 (comment
-  (select db {:select [:*] :from [:calendar] :limit 1})
+  (execute! db {:select [:*] :from [:calendar] :limit 1})
   ;=>
   '({:weeksinrange 20.0,
      :nettotaldays 152.0,

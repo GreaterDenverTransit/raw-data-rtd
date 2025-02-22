@@ -16,6 +16,9 @@
 
 (defn top-n
   [count' start-date end-date]
+  #p count'
+  #p start-date
+  #p end-date
   (boardings-db/top-n (coerce-count count')
                       (coerce-date start-date)
                       (coerce-date end-date)))

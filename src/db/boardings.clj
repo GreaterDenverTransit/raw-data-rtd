@@ -1,6 +1,5 @@
 (ns db.boardings
-  (:require [db.core :as db]
-            [honey.sql :as sql]))
+  (:require [db.core :as db]))
 
 (defn select
   [{:keys [limit
@@ -18,11 +17,12 @@
                           :total.route
                           :total.direction-name
                           :total.stop-id]}]
-    (db/select
-     (some-> query
-             limit    (assoc :limit limit)
-             order-by (assoc :order-by order-by)
-             where    (assoc :where where)))))
+    (db/execute!
+     db/db
+     (cond-> query
+       limit    (assoc :limit limit)
+       order-by (assoc :order-by order-by)
+       where    (assoc :where where)))))
 
 (defn top-n
   [n start-date end-date]
