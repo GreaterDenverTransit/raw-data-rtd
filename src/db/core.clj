@@ -11,7 +11,7 @@
   [db hsql]
   (jdbc/execute!
    (jdbc/with-options db {:builder-fn rs/as-unqualified-kebab-maps})
-   #p (sql/format hsql)))
+   (sql/format hsql)))
 
 (comment
   (execute! db {:select [:*] :from [:calendar] :limit 1})

@@ -1,6 +1,5 @@
 (ns domain.boardings
-  (:require [db.boardings :as boardings-db]
-            [honey.sql :as sql]))
+  (:require [db.boardings :as boardings-db]))
 
 (defn coerce-date
   "Strips `date` of its \"part of week\" section to make filtering easier"
@@ -16,9 +15,6 @@
 
 (defn top-n
   [count' start-date end-date]
-  #p count'
-  #p start-date
-  #p end-date
   (boardings-db/top-n (coerce-count count')
                       (coerce-date start-date)
                       (coerce-date end-date)))

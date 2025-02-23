@@ -10,5 +10,5 @@
   "Maps `error` to generic error response"
   [{:keys [error] :as _request}]
   (some-> {:status  (or (-> error ex-data :status) status/internal-server-error)
-           :headers {"Content-type" "text/json"}}
+           :headers {"Content-type" "application/json"}}
           (-> error ex-data :body) (assoc :body (-> error ex-data :body))))

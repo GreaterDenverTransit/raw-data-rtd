@@ -11,15 +11,20 @@
     (err/std-err req)
     (let [boardings (get-in req [:ctx :boardings])]
       {:status  status/okay
-       :headers {"Content-Type" "text/json"}
+       :headers {"Content-Type" "application/json"}
        :body    {:body boardings}})))
 
+(def body-atom (atom nil))
+(def json-body-atom (atom nil))
+
 (defn =boardings=
-  [{:keys [body] :as req}]
+  [{:keys [body json-body] :as req}]
   (let [count' (or (:count body) (config/default-count))
         order (or (:order body) :desc)
         start-date (:start-date body)
         end-date (:end-date body)
+        _ (reset! body-atom body)
+        _ (reset! json-body-atom json-body)
         boardings (boardings/boardings {:count'     count'
                                         :end-date   end-date
                                         :order      order
@@ -33,6 +38,7 @@
 
 (defn handler
   [req]
+  #p req
   ;; TODO: Add context map interceptor
   (resp (rop/>>= (assoc req :ctx {})
                  =boardings=)))

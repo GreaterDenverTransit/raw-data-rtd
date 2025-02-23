@@ -20,6 +20,7 @@
       (-> #'routes/app-routes
           rmkp/wrap-keyword-params
           rmp/wrap-params
+          (rmj/wrap-json-body {:keywords? true})
           rmj/wrap-json-response)
       {:legacy-return-value? false
        :ip                   address
@@ -55,7 +56,7 @@
    :body   ""
    :headers
    {:content-length "0"
-    :content-type   "text/json"
+    :content-type   "application/json"
     :date           "Sun, 2 Feb 2025 04:56:05 GMT"
     :server         "http-kit"}
    :status 200}
