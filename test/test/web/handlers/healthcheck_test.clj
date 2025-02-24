@@ -1,9 +1,9 @@
-(ns web.handlers.healthcheck-test
-  (:require [web.handlers.healthcheck :as sut]
-            [clojure.test :refer [deftest is testing]]
+(ns test.web.handlers.healthcheck-test
+  (:require [clojure.test :refer [deftest is testing]]
             [ring.mock.request :as mock]
             [server.core :as server]
-            [server.state :as state]))
+            [server.state :as state]
+            [web.handlers.healthcheck :as sut]))
 
 ;; NOTE: These tests may become flaky if run in parallel due to shared server
 ;; atom
@@ -11,7 +11,7 @@
   (testing "Healthcheck endpoint returns 200 when server is healthy"
     (server/start-server!)
     (is (= {:status  200
-            :headers {"Content-Type" "text/json"}
+            :headers {"Content-Type" "application/json"}
             :body    {}}
            (sut/handler (mock/request :get "/health"))))
     (server/stop-server!)))
@@ -19,7 +19,7 @@
 (deftest healthcheck-failure-test
   (testing "Healthcheck endpoint returns 503 when server"
     (let [service-unavailable-resp {:status  503
-                                    :headers {"Content-Type" "text/json"}
+                                    :headers {"Content-Type" "application/json"}
                                     :body    {}}]
     (testing "not started"
       (is (= service-unavailable-resp

@@ -12,26 +12,19 @@
     (let [boardings (get-in req [:ctx :boardings])]
       {:status  status/okay
        :headers {"Content-Type" "application/json"}
-       :body    {:body boardings}})))
-
-;; TODO: DELETE
-(def body-atom (atom nil))
-(def req-atom (atom nil))
-(def boardings-arg-atom (atom nil))
+       :body    boardings})))
 
 (defn =boardings=
   [{:keys [params] :as req}]
+  (prn "req" req)
   (let [count' (or (:count params) (config/default-count))
         order (or (:order params) :desc)
         start-date (:start-date params)
         end-date (:end-date params)
-        _ (reset! req-atom req)
-        _ (reset! body-atom params)
-        _ (reset! boardings-arg-atom {:count'     count'
-                                      :end-date   end-date
-                                      :order      order
-                                      :start-date start-date})
-        boardings (boardings/boardings {:count'     count'
+        db (:db req)
+        _ (prn "db" db)
+        boardings (boardings/boardings db
+                                       {:count'     count'
                                         :end-date   end-date
                                         :order      order
                                         :start-date start-date})]
@@ -45,7 +38,6 @@
 ;; TODO: Add support for 400 error handling
 (defn handler
   [req]
-  #p req
   ;; TODO: Add context map interceptor
   (resp (rop/>>= (assoc req :ctx {})
                  =boardings=)))
