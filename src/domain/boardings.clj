@@ -1,6 +1,8 @@
 (ns domain.boardings
   (:require [db.boardings :as boardings-db]))
 
+(def boardings-atom (atom nil))
+
 (defn coerce-date
   "Strips `date` of its \"part of week\" section to make filtering easier"
   [date]
@@ -15,6 +17,7 @@
 
 (defn top-n
   [count' start-date end-date]
+  (swap! boardings-atom assoc :top-n {:count count' :start-date start-date :end-date end-date})
   (boardings-db/top-n (coerce-count count')
                       (coerce-date start-date)
                       (coerce-date end-date)))
@@ -65,7 +68,9 @@
 
 (defn boardings
   [{:keys [count' order start-date end-date] :as boardings}]
+  (println "in boardings")
+  (reset! boardings-atom {:boardings boardings})
   (when (valid-boardings? boardings)
-    (if (asc? order)
+    (if (asc? #p order)
       (top-n count' start-date end-date)
       (bottom-n count' start-date end-date))))

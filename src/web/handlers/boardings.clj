@@ -14,17 +14,23 @@
        :headers {"Content-Type" "application/json"}
        :body    {:body boardings}})))
 
+;; TODO: DELETE
 (def body-atom (atom nil))
-(def json-body-atom (atom nil))
+(def req-atom (atom nil))
+(def boardings-arg-atom (atom nil))
 
 (defn =boardings=
-  [{:keys [body json-body] :as req}]
-  (let [count' (or (:count body) (config/default-count))
-        order (or (:order body) :desc)
-        start-date (:start-date body)
-        end-date (:end-date body)
-        _ (reset! body-atom body)
-        _ (reset! json-body-atom json-body)
+  [{:keys [params] :as req}]
+  (let [count' (or (:count params) (config/default-count))
+        order (or (:order params) :desc)
+        start-date (:start-date params)
+        end-date (:end-date params)
+        _ (reset! req-atom req)
+        _ (reset! body-atom params)
+        _ (reset! boardings-arg-atom {:count'     count'
+                                      :end-date   end-date
+                                      :order      order
+                                      :start-date start-date})
         boardings (boardings/boardings {:count'     count'
                                         :end-date   end-date
                                         :order      order
@@ -36,6 +42,7 @@
                        (ex-info "Boardings could not be returned"
                                 {:status status/internal-server-error}))))))
 
+;; TODO: Add support for 400 error handling
 (defn handler
   [req]
   #p req

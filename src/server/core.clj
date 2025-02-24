@@ -20,7 +20,7 @@
       (-> #'routes/app-routes
           rmkp/wrap-keyword-params
           rmp/wrap-params
-          (rmj/wrap-json-body {:keywords? true})
+          rmj/wrap-json-params
           rmj/wrap-json-response)
       {:legacy-return-value? false
        :ip                   address
