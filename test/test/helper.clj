@@ -1,6 +1,8 @@
 (ns test.helper
-  (:require [test.config :as config]
+  (:require [db.core :as db :refer [*db-url*]]
+            [test.config :as config]
             [next.jdbc :as jdbc]
+            [next.jdbc.connection :as jdbc-conn]
             [jsonista.core :as json]
             [ring.mock.request :as mock]))
 
@@ -12,17 +14,12 @@
 
 (defn- body->params
   [req]
-  (prn "body" (:body req))
   (cond-> req
     (:body req) (->
                  (assoc :params (json/read-value (slurp (:body req)) json/keyword-keys-object-mapper)))))
 
 (defn mock-json-req
   [{:keys [body handler method url]}]
-  (prn "body" body)
-  (prn "handler" handler)
-  (prn "method" method)
-  (prn "url" url)
   (-> (mock/request method url)
       (mock/json-body body)
       body->params
@@ -34,5 +31,8 @@
 (defn system-fixture
   "Default test fixture for setting up a db for tests"
   [f]
-  (binding [test-db (jdbc/get-datasource (config/db))]
-    (f)))
+  (binding [*db-url* (jdbc-conn/jdbc-url (config/db))
+            test-db (jdbc/get-datasource (config/db))]
+    (db/migrate)
+    (f)
+    (db/clean)))

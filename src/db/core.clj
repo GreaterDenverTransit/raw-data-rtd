@@ -1,11 +1,28 @@
 (ns db.core
   (:require [config.core :as config]
             [next.jdbc :as jdbc]
+            [next.jdbc.connection :as jdbc-conn]
             [next.jdbc.result-set :as rs]
-            [honey.sql :as sql]))
+            [honey.sql :as sql])
+  (:import [org.flywaydb.core Flyway]))
 
 ;; TODO: Add connection pools
 (def db (jdbc/get-datasource (config/db)))
+
+(def ^:dynamic *db-url* (jdbc-conn/jdbc-url (config/db)))
+
+(def flyway
+  (-> (Flyway/configure)
+      (.locations (into-array String ["classpath:db/migrations"]))
+      (.dataSource *db-url* nil nil)
+      (.cleanDisabled false)
+      (.load)))
+
+(defn migrate [] (.migrate flyway))
+
+(defn clean [] (.clean flyway))
+
+(defn reset [] (clean) (migrate))
 
 (defn execute!
   [db hsql]

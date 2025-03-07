@@ -2,4 +2,4 @@
 {;; DB
  :db
  {:dbtype "sqlite"
-  :dbname #or [#env TEST_DB_SRC "resources/db/db.db"]}}
+  :dbname #or [#env TEST_DB_SRC "resources/db/empty.db"]}}
