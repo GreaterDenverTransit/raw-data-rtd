@@ -60,14 +60,6 @@
 
 (defn- valid-boardings?
   [{:keys [count' order start-date end-date]}]
-  (prn "in valid-boardings?")
-  (prn "(count? count')" (count? count'))
-  (prn "(order? order)"
-       (order? order))
-  (prn "(date? start-date)"
-       (date? start-date))
-  (prn "(date? end-date)"
-       (date? end-date))
   (and (count? count')
        (order? order)
        (date? start-date)
@@ -76,9 +68,7 @@
 
 (defn boardings
   [db {:keys [count' order start-date end-date] :as boardings}]
-  (println "in boardings")
-  (println "boardings" boardings)
   (when (valid-boardings? boardings)
     (if (asc? order)
-      (top-n db count' start-date end-date)
-      (bottom-n db count' start-date end-date))))
+      (bottom-n db count' start-date end-date)
+      (top-n db count' start-date end-date))))

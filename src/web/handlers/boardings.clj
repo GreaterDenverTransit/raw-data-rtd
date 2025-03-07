@@ -16,13 +16,11 @@
 
 (defn =boardings=
   [{:keys [params] :as req}]
-  (prn "req" req)
   (let [count' (or (:count params) (config/default-count))
         order (or (:order params) :desc)
         start-date (:start-date params)
         end-date (:end-date params)
         db (:db req)
-        _ (prn "db" db)
         boardings (boardings/boardings db
                                        {:count'     count'
                                         :end-date   end-date
