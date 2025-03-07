@@ -5,6 +5,8 @@
 
  ;; DB
  :db
- {:classname    "org.sqlite.JDBC"
-  :subprotocol  "sqlite"
-  :subname      #or [#env DB_SRC "resources/db/db.db"]}}
+ {:dbtype  "sqlite"
+  :dbname  #or [#env DB_SRC "resources/db/db.db"]}
+
+ ;; defaults
+ :default-count 20}

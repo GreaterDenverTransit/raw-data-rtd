@@ -13,8 +13,8 @@
   [_args]
   (if (healthy? (state/server-info @state/server))
     {:status  status/okay
-     :headers {"Content-Type" "text/json"}
+     :headers {"Content-Type" "application/json"}
      :body    {}}
     {:status  status/service-unavailable
-     :headers {"Content-Type" "text/json"}
+     :headers {"Content-Type" "application/json"}
      :body    {}}))

@@ -2,6 +2,7 @@
   (:gen-class)
   (:require [config.core :as config]
             [org.httpkit.server :as server]
+            [ring.middleware.json :as rmj]
             [ring.middleware.keyword-params :as rmkp]
             [ring.middleware.params :as rmp]
             [routes.core :as routes]
@@ -16,7 +17,11 @@
     (reset!
      state/server
      (server/run-server
-      (-> #'routes/app-routes rmkp/wrap-keyword-params rmp/wrap-params)
+      (-> #'routes/app-routes
+          rmkp/wrap-keyword-params
+          rmp/wrap-params
+          rmj/wrap-json-params
+          rmj/wrap-json-response)
       {:legacy-return-value? false
        :ip                   address
        :port                 port}))))
@@ -51,7 +56,7 @@
    :body   ""
    :headers
    {:content-length "0"
-    :content-type   "text/json"
+    :content-type   "application/json"
     :date           "Sun, 2 Feb 2025 04:56:05 GMT"
     :server         "http-kit"}
    :status 200}

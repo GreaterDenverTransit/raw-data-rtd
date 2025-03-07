@@ -1,0 +1,5 @@
+;; configuration file to be used by test namespaces
+{;; DB
+ :db
+ {:dbtype "sqlite"
+  :dbname #or [#env TEST_DB_SRC "resources/db/db.db"]}}
