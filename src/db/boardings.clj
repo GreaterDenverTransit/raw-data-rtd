@@ -26,13 +26,6 @@
 
 (defn top-n
   [db n start-date end-date]
-  (prn "in db/top-n")
-  (prn "select res"
-       (select db {:limit    n
-              :order-by [[[:sum :boardings] :desc]]
-              :where    [:or
-                         [:= [:substr :schedule-name 1 5] start-date]
-                         [:= [:substr :schedule-name 1 5] end-date]]}))
   (select db {:limit    n
               :order-by [[[:sum :boardings] :desc]]
               :where    [:or
