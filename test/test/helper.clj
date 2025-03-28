@@ -16,7 +16,8 @@
   [req]
   (cond-> req
     (:body req) (->
-                 (assoc :params (json/read-value (slurp (:body req)) json/keyword-keys-object-mapper)))))
+                 (assoc :params (json/read-value (slurp (:body req))
+                                                 json/keyword-keys-object-mapper)))))
 
 (defn mock-json-req
   [{:keys [body handler method url]}]
@@ -33,6 +34,6 @@
   [f]
   (binding [*db-url* (jdbc-conn/jdbc-url (config/db))
             test-db (jdbc/get-datasource (config/db))]
-    (db/migrate)
+    (db/reset)
     (f)
     (db/clean)))

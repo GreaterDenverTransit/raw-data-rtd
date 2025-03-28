@@ -14,5 +14,6 @@ CREATE TABLE IF NOT EXISTS "Combined_Ridership_Data" (
         "ALIGHTINGS"       INTEGER,
         "LOAD"             INTEGER,
         "Schedule_Year"    INTEGER,
-        "Schedule_Month"   INTEGER
-, schedule_days, service_id);
+        "Schedule_Month"   INTEGER,
+        schedule_days,
+        service_id);

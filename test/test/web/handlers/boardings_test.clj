@@ -39,8 +39,7 @@
                        :route          "A"
                        :direction-name "W-Bound"
                        :stop-name      "Denver Airport Station"
-                       :boardings      4797.5}]}))
-    (is false)))
+                       :boardings      4797.5}]}))))
 
 (deftest bottom-boardings-test
   (testing "Boardings endpoint can return bottom boardings"
