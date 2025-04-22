@@ -8,6 +8,7 @@ jobs:
       - image: cimg/clojure:1.11.1
     steps:
       - checkout
+      - run: make test_db
       - run: clojure -X:test
 
 # Orchestrate jobs using workflows
