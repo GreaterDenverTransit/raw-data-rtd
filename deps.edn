@@ -23,6 +23,10 @@
  :aliases
  {:clj-paths      ["src"]
   :resource-paths ["resources"]
+  :build-db       {:exec-fn        combine-db-partitions/concat-db-files!
+                   :extra-paths    ["scripts"]
+                   :jvm-opts       ["-Xms8g" "-Xmx8g"]
+                   :resource-paths ["resources"]}
   :test           {:exec-fn        kaocha.runner/exec-fn
                    :extra-paths    ["test" "test-resources"]
                    :extra-deps     {;; test stubbing/mocking
