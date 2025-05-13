@@ -9,8 +9,8 @@
 ** Setting up frontend
 
 * TODO
-[] https://github.com/donut-party/datapotato + tests
-[] ~sqlite~ -> ~PostgreSQL~
-[] one script to rule all of ~scripts/~
-[] db in proper accessible storage (AWS, Google Drive, SFTP server, etc.)
-[] db migrations for schema
+- [] https://github.com/donut-party/datapotato + tests
+- [] ~sqlite~ -> ~PostgreSQL~
+- [] one script to rule all of ~scripts/~
+- [] db in proper accessible storage (AWS, Google Drive, SFTP server, etc.)
+- [] db migrations for schema
