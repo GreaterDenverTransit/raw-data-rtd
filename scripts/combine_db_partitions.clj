@@ -14,12 +14,20 @@
           batches (partition-all 15 files)
           f (or (and dry? println) sh/sh)]
 
-      (spit
-       "resources/db/db_partitions2/concatenated_db.db"
-       (:out (apply
-              f
-              "cat"
-              files)))
+      ;; Use file command, compare against correct file with diff
+      (into []
+            (for [idx (range (count batches))]
+              (do
+                (prn "batch" idx)
+                (prn (nth batches idx))
+                (spit
+                 "resources/db/db_partitions2/concatenated_db_no_trim.db"
+                 (:out (apply
+                        f
+                        "cat"
+                        (nth batches idx)))
+                 :append
+                 true))))
 
       #_(if dry?
         (do
