@@ -14,3 +14,4 @@
 - [] one script to rule all of ~scripts/~
 - [] db in proper accessible storage (AWS, Google Drive, SFTP server, etc.)
 - [] db migrations for schema
+- [] vulnerability scanner as part of circleCI job https://github.com/rm-hull/nvd-clojure
