@@ -1,9 +1,6 @@
-(ns db.spec)
+(ns db.spec.combined-ridership-data
+  (:require [db.spec.core :refer [non-empty-string]]))
 
-;; generic specs
-(def non-empty-string [:string {:min 1}])
-
-;; domain specs
 (def direction-name
   [:enum
    "N-Bound"

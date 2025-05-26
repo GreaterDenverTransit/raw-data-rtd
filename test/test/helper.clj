@@ -12,7 +12,7 @@
 
 (defn- inject-test-db
   [req]
-  (assoc req :db (jdbc/get-connection (get-in gen/potato-db [:fixtures :dbspec]))))
+  (assoc req :db dc/*connection*))
 
 (defn- body->params
   [req]
