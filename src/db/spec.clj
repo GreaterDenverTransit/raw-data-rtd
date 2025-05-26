@@ -75,7 +75,7 @@
    [:schedule-days schedule-days]
    ;; YYYY_MM_WD where WD ∈ schedule-days
    ;; ex: 2019_04_FR
-   [:service-id [:re #"[0-9]{4}_[0-1][0-9]_(FR|MT|SA|SU|WK)"]]
+   [:service-id [:re #"[0-9]{4}_[0-1][0-9]_FR|MT|SA|SU|WK"]]
    [:schedule-month pos-int?]
    ;; a bit generous with the range but don't want generators generating wildly
    ;; unrealistic numbers

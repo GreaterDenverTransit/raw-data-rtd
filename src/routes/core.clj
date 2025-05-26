@@ -7,5 +7,5 @@
 
 (defroutes app-routes
   (GET "/health" [] healthcheck/handler)
-  (POST "/boardings" request (boardings/handler (assoc request :db db/db))
+  (POST "/boardings" request (boardings/handler (assoc request :db db/*db*))
   (route/not-found "Route not found")))

@@ -1,23 +1,24 @@
 (ns test.helper
-  (:require [db.core :as db :refer [*db-url*]]
+  (:require [db.core :as db :refer [*db*]]
+            [donut.datapotato.core :as dc]
+            [jsonista.core :as json]
             [test.config :as config]
+            [test.db.data-gen :as gen]
             [next.jdbc :as jdbc]
             [next.jdbc.connection :as jdbc-conn]
-            [jsonista.core :as json]
             [ring.mock.request :as mock]))
 
 (def ^:dynamic test-db nil)
 
 (defn- inject-test-db
   [req]
-  (assoc req :db test-db))
+  (assoc req :db (jdbc/get-connection (get-in gen/potato-db [:fixtures :dbspec]))))
 
 (defn- body->params
   [req]
   (cond-> req
-    (:body req) (->
-                 (assoc :params (json/read-value (slurp (:body req))
-                                                 json/keyword-keys-object-mapper)))))
+    (:body req) (assoc :params (json/read-value (slurp (:body req))
+                                                json/keyword-keys-object-mapper))))
 
 (defn mock-json-req
   [{:keys [body handler method url]}]
@@ -27,13 +28,18 @@
       inject-test-db
       handler))
 
-;; NOTE: Since the db is read-only it *should* be fine just to load up the actual
-;; db, if this changes then building a separate DB will be necessary
 (defn system-fixture
   "Default test fixture for setting up a db for tests"
   [f]
-  (binding [*db-url* (jdbc-conn/jdbc-url (config/db))
-            test-db (jdbc/get-datasource (config/db))]
-    (db/reset)
-    (f)
-    (db/clean)))
+  (dc/with-fixtures gen/potato-db (f)))
+
+(comment
+  ;; preserving this dead code temporarily in case approach changes
+  (defn system-fixture'
+    "Default test fixture for setting up a db for tests"
+    [f]
+    (binding [*db* (jdbc-conn/jdbc-url (config/db))
+              test-db (jdbc/get-datasource (config/db))]
+      (db/reset)
+      (f)
+      (db/clean))))

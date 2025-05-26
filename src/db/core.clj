@@ -7,7 +7,7 @@
   (:import [org.flywaydb.core Flyway]))
 
 ;; TODO: Add connection pools
-(def db (jdbc/get-datasource (config/db)))
+(def ^:dynamic *db* (jdbc/get-datasource (config/db)))
 
 (def ^:dynamic *db-url* (jdbc-conn/jdbc-url (config/db)))
 
@@ -31,7 +31,7 @@
    (sql/format hsql)))
 
 (comment
-  (execute! db {:select [:*] :from [:calendar] :limit 1})
+  (execute! *db* {:select [:*] :from [:calendar] :limit 1})
   ;=>
   '({:weeksinrange 20.0
      :nettotaldays 152.0
