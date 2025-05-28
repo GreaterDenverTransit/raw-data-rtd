@@ -28,7 +28,8 @@
   :resource-paths ["resources"]
   :test           {:exec-fn        kaocha.runner/exec-fn
                    :extra-paths    ["test" "test-resources"]
-                   :extra-deps     {;; test stubbing/mocking
+                   :extra-deps     {aysylu/loom                      {:mvn/version "1.0.2"}
+                                    ;; test stubbing/mocking
                                     circleci/bond                    {:mvn/version "0.6.0"}
                                     ring/ring-mock                   {:mvn/version "0.4.0"}
                                     party.donut/datapotato           {:mvn/version "1.0.459"}

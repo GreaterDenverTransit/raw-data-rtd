@@ -1,9 +1,11 @@
 (ns db.core
   (:require [config.core :as config]
+            [honey.sql :as sql]
+            [medley.core :as m]
             [next.jdbc :as jdbc]
             [next.jdbc.connection :as jdbc-conn]
             [next.jdbc.result-set :as rs]
-            [honey.sql :as sql])
+            [utils :refer [->kebab-case-keyword]])
   (:import [org.flywaydb.core Flyway]))
 
 ;; TODO: Add connection pools
@@ -26,9 +28,11 @@
 
 (defn execute!
   [db hsql]
-  (jdbc/execute!
-   (jdbc/with-options db {:builder-fn rs/as-unqualified-kebab-maps})
-   (sql/format hsql)))
+  (mapv
+   (partial m/map-keys ->kebab-case-keyword)
+   (jdbc/execute!
+    (jdbc/with-options db {:builder-fn rs/as-unqualified-kebab-maps})
+    (sql/format hsql))))
 
 (comment
   (execute! *db* {:select [:*] :from [:calendar] :limit 1})

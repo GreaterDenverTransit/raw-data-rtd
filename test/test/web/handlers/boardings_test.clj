@@ -8,70 +8,84 @@
 
 (deftest top-boardings-test
   (testing "Boardings endpoint can return top boardings"
-    (try
     (dc/insert-fixtures
-     {:combined-ridership-data [{:set {:schedule-name  "Apr19 (Friday)"
-                                       :route          "A"
-                                       :direction-name "E-Bound"
-                                       :boardings      6099.166}}
-                                {:set {:schedule-name  "Apr19 (Weekday)"
-                                       :route          "A"
-                                       :direction-name "E-Bound"
-                                       :boardings      6780.879}}
-                                {:set {:schedule-name  "Apr19 (Saturday)"
-                                       :route          "A"
-                                       :direction-name "W-Bound"
-                                       :boardings      4797.5}}
-                                {:set {:schedule-name  "Apr19 (Friday)"
-                                       :route          "A"
-                                       :direction-name "W-Bound"
-                                       :boardings      6755.833}}
-                                {:set {:schedule-name  "Apr19 (Weekday)"
-                                       :route          "A"
-                                       :direction-name "W-Bound"
-                                       :boardings      6457.426}}
-                                ;; B line data here is totally fake
-                                {:set {:schedule-name  "Apr 19 (Weekday)"
-                                       :route          "B"
-                                       :direction-name "W-Bound"
-                                       :boardings      913.5}}]})
-    (catch Exception e (prn e)))
-    (is true)
-    (is (= (helper/mock-json-req {:body    {:count      5
-                                              :start-date "Apr19 (Weekday)"
-                                              :end-date   "Apr19 (Weekday)"}
-                                    :handler sut/handler
-                                    :method  :post
-                                    :url     "/boardings"})
-             {:status  200
-              :headers {"Content-Type" "application/json"}
-              :body    [{:schedule-name  "Apr19 (Weekday)"
-                         :route          "A"
-                         :direction-name "E-Bound"
-                         :stop-name      "Union Station Track 1"
-                         :boardings      6780.879}
-                        {:schedule-name  "Apr19 (Friday)"
-                         :route          "A"
-                         :direction-name "W-Bound"
-                         :stop-name      "Denver Airport Station"
-                         :boardings      6755.833}
-                        {:schedule-name  "Apr19 (Weekday)"
-                         :route          "A"
-                         :direction-name "W-Bound"
-                         :stop-name      "Denver Airport Station"
-                         :boardings      6457.426}
-                        {:schedule-name  "Apr19 (Friday)"
-                         :route          "A"
-                         :direction-name "E-Bound"
-                         :stop-name      "Union Station Track 1"
-                         :boardings      6099.166}
-                        {:schedule-name  "Apr19 (Saturday)"
-                         :route          "A"
-                         :direction-name "W-Bound"
-                         :stop-name      "Denver Airport Station"
-                         :boardings      4797.5}]}))))
+     {:combined-ridership-data
+      [{:refs {:stop-id :union}
+        :set  {:schedule-name  "Apr19 (Friday)"
+               :route          "A"
+               :direction-name "E-Bound"
+               :boardings      6099.166}}
+       {:refs {:stop-id :union}
+        :set  {:schedule-name  "Apr19 (Weekday)"
+               :route          "A"
+               :direction-name "E-Bound"
+               :boardings      6780.879}}
+       {:refs {:stop-id :den}
+        :set  {:schedule-name  "Apr19 (Saturday)"
+               :route          "A"
+               :direction-name "W-Bound"
+               :boardings      4797.5}}
+       {:refs {:stop-id :den}
+        :set  {:schedule-name  "Apr19 (Friday)"
+               :route          "A"
+               :direction-name "W-Bound"
+               :boardings      6755.833}}
+       {:refs {:stop-id :den}
+        :set  {:schedule-name  "Apr19 (Weekday)"
+               :route          "A"
+               :direction-name "W-Bound"
+               :boardings      6457.426}}
+       ;; B line data here is totally fake
+       {:refs {:stop-id :westminster}
+        :set  {:schedule-name  "Apr 19 (Weekday)"
+               :route          "B"
+               :direction-name "W-Bound"
+               :boardings      913.5}}]
 
-#_(deftest bottom-boardings-test
+      :stops
+      [{:ent-name :union
+        :set      {:stop-name "Union Station Track 1"}}
+       {:ent-name :den
+        :set      {:stop-name "Denver Airport Station"}}
+       {:ent-name :westminster
+        :set      {:stop-name "Westminster Station"}}]})
+    (let [{:keys [status body]} (helper/mock-json-req
+                                 {:body    {:count      5
+                                            :start-date "Apr19 (Weekday)"
+                                            :end-date   "Apr19 (Weekday)"}
+                                  :handler sut/handler
+                                  :method  :post
+                                  :url     "/boardings"})]
+
+      (is (= 200 status))
+      (is (= [{:schedule-name  "Apr19 (Weekday)"
+               :route          "A"
+               :direction-name "E-Bound"
+               :stop-name      "Union Station Track 1"
+               :boardings      6780.879}
+              {:schedule-name  "Apr19 (Friday)"
+               :route          "A"
+               :direction-name "W-Bound"
+               :stop-name      "Denver Airport Station"
+               :boardings      6755.833}
+              {:schedule-name  "Apr19 (Weekday)"
+               :route          "A"
+               :direction-name "W-Bound"
+               :stop-name      "Denver Airport Station"
+               :boardings      6457.426}
+              {:schedule-name  "Apr19 (Friday)"
+               :route          "A"
+               :direction-name "E-Bound"
+               :stop-name      "Union Station Track 1"
+               :boardings      6099.166}
+              {:schedule-name  "Apr19 (Saturday)"
+               :route          "A"
+               :direction-name "W-Bound"
+               :stop-name      "Denver Airport Station"
+               :boardings      4797.5}]
+           body)))))
+
+(deftest bottom-boardings-test
   (testing "Boardings endpoint can return bottom boardings"
     (is (= (helper/mock-json-req {:body    {:count      5
                                             :order      :asc
