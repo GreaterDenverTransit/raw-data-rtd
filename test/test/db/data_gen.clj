@@ -31,16 +31,13 @@
               {:ent-name ent-name
                :ent-type ent-type})))
 
-    #p visit-val
-    #p _record
-
     (let [insert-result (sql/insert! connection
                                      table-name
                                      (or generate visit-val)
                                      {:column-fn ->snake_case_symbol})]
       (me/map-keys
        ->kebab-case-keyword
-       #p (get-inserted' {:dbspec        dbspec
+       (get-inserted' {:dbspec        dbspec
                        :dbtype        dbtype
                        :connection    connection
                        :table-name    table-name
@@ -60,21 +57,6 @@
    {:fixtures  {:table-name "stops"}
     :generate  {:schema spec.stops/stops}
     :prefix    :s}})
-
-#_(defn insert!
-  "Inserts `_record` from potato-db into `conn`"
-  [conn {:keys [ent-type visit-val generate] :as _record}]
-  #p _record
-  #p conn
-  #p ((-> conn :fixtures :get-connection) conn)
-  (when-not visit-val
-    (let [conn' ((-> conn :fixtures :get-connection) conn)
-          table-name (-> schema ent-type :fixtures :table-name)]
-      (sql/insert! conn' table-name generate {:column-fn ->snake_case_symbol}))))
-
-(def table-order
-  [:stops
-   :combined-ridership-data])
 
 ;; TODO: Move these to migrations
 (def table-insertions
