@@ -87,37 +87,84 @@
 
 (deftest bottom-boardings-test
   (testing "Boardings endpoint can return bottom boardings"
-    (is (= (helper/mock-json-req {:body    {:count      5
+    (dc/insert-fixtures
+     {:combined-ridership-data
+      [{:refs {:stop-id :union}
+        :set  {:schedule-name  "Apr19 (Friday)"
+               :route          113
+               :direction-name "E-Bound"
+               :boardings      1}}
+       {:refs {:stop-id :jeffco}
+        :set  {:schedule-name  "Apr19 (Friday)"
+               :route          103
+               :direction-name "W-Bound"
+               :boardings      0}}
+       {:refs {:stop-id :ridgeline}
+        :set  {:schedule-name  "Apr19 (Saturday)"
+               :route          0
+               :direction-name "N-Bound"
+               :boardings      3.7}}
+       {:refs {:stop-id :broadway+bannock}
+        :set  {:schedule-name  "Apr19 (Saturday)"
+               :route          0
+               :direction-name "N-Bound"
+               :boardings      2.7}}
+       {:refs {:stop-id :broadway+fremont}
+        :set  {:schedule-name  "Apr19 (Saturday)"
+               :route          0
+               :direction-name "N-Bound"
+               :boardings      3.5}}
+       ;; B line data here is totally fake
+       {:refs {:stop-id :westminster}
+        :set  {:schedule-name  "Apr 19 (Weekday)"
+               :route          "B"
+               :direction-name "W-Bound"
+               :boardings      913.5}}]
+
+      :stops
+      [{:ent-name :jeffco
+        :set      {:stop-name "Jeffco Government Center Station"}}
+       {:ent-name :union
+        :set      {:stop-name "Union Station Track 8"}}
+       {:ent-name :broadway+fremont
+        :set      {:stop-name "S Broadway & W Fremont Pl"}}
+       {:ent-name :broadway+bannock
+        :set      {:stop-name "S Broadway & S Bannock St"}}
+       {:ent-name :ridgeline
+        :set      {:stop-name "8700 Block Ridgeline Blvd"}}
+       {:ent-name :westminster
+        :set      {:stop-name "Westminster Station"}}]})
+    (is (= {:status  200
+            :headers {"Content-Type" "application/json"}
+            :body    [{:schedule-name  "Apr19 (Friday)"
+                       :route          "103"
+                       :direction-name "W-Bound"
+                       :stop-name      "Jeffco Government Center Station"
+                       :boardings      0}
+                      {:schedule-name  "Apr19 (Friday)"
+                       :route          "113"
+                       :direction-name "E-Bound"
+                       :stop-name      "Union Station Track 8"
+                       :boardings      1}
+                      {:schedule-name  "Apr19 (Saturday)"
+                       :route          "0"
+                       :direction-name "N-Bound"
+                       :stop-name      "S Broadway & S Bannock St"
+                       :boardings      2.7}
+                      {:schedule-name  "Apr19 (Saturday)"
+                       :route          "0"
+                       :direction-name "N-Bound"
+                       :stop-name      "S Broadway & W Fremont Pl"
+                       :boardings      3.5}
+                      {:schedule-name  "Apr19 (Saturday)"
+                       :route          "0"
+                       :direction-name "N-Bound"
+                       :stop-name      "8700 Block Ridgeline Blvd"
+                       :boardings      3.7}]}
+           (helper/mock-json-req {:body    {:count      5
                                             :order      :asc
                                             :start-date "Apr19 (Weekday)"
                                             :end-date   "Apr19 (Weekday)"}
                                   :handler sut/handler
                                   :method  :post
-                                  :url     "/boardings"})
-           {:status  200
-            :headers {"Content-Type" "application/json"}
-            :body    [{:schedule-name  "Apr19 (Friday)"
-                       :route          103
-                       :direction-name "W-Bound"
-                       :stop-name      "Jeffco Government Center Station"
-                       :boardings      0}
-                      {:schedule-name  "Apr19 (Friday)"
-                       :route          113
-                       :direction-name "E-Bound"
-                       :stop-name      "Union Station Track 8"
-                       :boardings      0}
-                      {:schedule-name  "Apr19 (Saturday)"
-                       :route          0
-                       :direction-name "N-Bound"
-                       :stop-name      "S Broadway & S Bannock St"
-                       :boardings      0}
-                      {:schedule-name  "Apr19 (Saturday)"
-                       :route          0
-                       :direction-name "N-Bound"
-                       :stop-name      "S Broadway & W Fremont Pl"
-                       :boardings      0}
-                      {:schedule-name  "Apr19 (Saturday)"
-                       :route          0
-                       :direction-name "N-Bound"
-                       :stop-name      "8700 Block Ridgeline Blvd"
-                       :boardings      0}]}))))
+                                  :url     "/boardings"})))))
