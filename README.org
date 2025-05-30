@@ -8,11 +8,11 @@
 ** Setting up server
 ** Setting up frontend
 
-* TODO
-- [x] https://github.com/donut-party/datapotato + tests
-- [] ~sqlite~ -> ~PostgreSQL~
-- [] one script to rule all of ~scripts/~
-- [] db in proper accessible storage (AWS, Google Drive, SFTP server, etc.)
-- [] db migrations for schema
-- [] vulnerability scanner as part of circleCI job https://github.com/rm-hull/nvd-clojure
-- [] better name for project
+* ~TODO~
+- [ x ] h̵t̵t̵p̵s̵:̵/̵/̵g̵i̵t̵h̵u̵b̵.̵c̵o̵m̵/̵d̵o̵n̵u̵t̵-̵p̵a̵r̵t̵y̵/̵d̵a̵t̵a̵p̵o̵t̵a̵t̵o̵ ̵+̵ ̵t̵e̵s̵t̵s̵
+- [ ] ~sqlite~ -> ~PostgreSQL~
+- [ ] one script to rule all of ~scripts/~
+- [ ] db in proper accessible storage (AWS, Google Drive, SFTP server, etc.)
+- [ ] db migrations for schema
+- [ ] vulnerability scanner as part of circleCI job https://github.com/rm-hull/nvd-clojure
+- [ ] better name for project
