@@ -10,13 +10,14 @@
                           :total.direction-name
                           :s.stop-name
                           [[:sum :boardings] :boardings]]
-               :from     [[:Combined_Ridership_Data :total]]
+               :from     [[:combined_ridership_data :total]]
                :join     [[:stops :s]
                           [:= :s.stop-id :total.stop-id]]
                :group-by [:total.schedule-name
                           :total.route
                           :total.direction-name
                           :total.stop-id]}]
+
     (db/execute!
      db
      (cond-> query
