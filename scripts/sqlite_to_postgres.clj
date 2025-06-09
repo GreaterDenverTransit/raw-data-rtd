@@ -39,6 +39,10 @@
   (str "The following errors occurred while parsing your command:\n\n"
        (str/join \newline errors)))
 
+(def mapping
+  "Mapping of dumped table names to correct table names"
+  {"\"Combined_Ridership_Data\"" "combined_ridership_data"})
+
 (defn validate-args
   "Validate command line arguments. Either return a map indicating the program
   should exit (with an error message, and optional ok status), or a map
@@ -86,15 +90,21 @@
   (if-not skip-migrate?
     (binding [db/*db* (jdbc-conn/jdbc-url conn)]
       (when verbose?
-        (println "Running PostgreSQL migrations on provided connection string"))
-      )
+        (println "Running PostgreSQL migrations on provided connection string")
+        (db/reset!)))
     (when verbose? (println "Skipping migration due to -s/--skip-migration param"))))
 
 (defn rename!
-  [opts])
+  "Renames DB table names and columns to follow consistent casing"
+  [{:keys [out verbose?]}]
+  (doseq [[from to] mapping]
+    (when verbose?
+      (println "Renaming table " from " to " to))
+    (let [arg (format "/%s/%s" from to)]
+      (sh/sh "sed" arg out))))
 
 (defn import!
-  [opts])
+  [{:keys [in verbose?]}])
 
 (defn cleanup!
   [opts])
