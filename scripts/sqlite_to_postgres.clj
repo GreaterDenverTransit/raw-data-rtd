@@ -1,5 +1,6 @@
 (ns sqlite-to-postgres
-  (:require [clojure.java.shell :as sh]
+  (:require [clojure.java.io :as io]
+            [clojure.java.shell :as sh]
             [clojure.string :as str]
             [clojure.tools.cli :refer [parse-opts]]
             [db.core :as db]
@@ -104,10 +105,21 @@
       (sh/sh "sed" arg out))))
 
 (defn import!
-  [{:keys [in verbose?]}])
+  "Imports data from `out` into `conn`"
+  [{:keys [conn out verbose?]}]
+  (when verbose?
+    (println "Importing data from " out))
+  (with-open [rdr (io/reader out)]
+    (let [stmt-batches (partition-all 1000 (line-seq rdr))]
+      (doseq [batch stmt-batches]
+        (db/batch-execute! conn batch)))))
 
 (defn cleanup!
-  [opts])
+  "Deletes `out` file"
+  [{:keys [out verbose?]}]
+  (when verbose?
+    (println "Deleting " out))
+  (sh/sh "rm" out))
 
 (defn -main
   [& args]
@@ -120,4 +132,4 @@
         migrate!
         rename!
         import!
-        cleanup!))))
+        #_cleanup!))))

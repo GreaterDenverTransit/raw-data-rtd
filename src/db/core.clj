@@ -6,7 +6,8 @@
             [next.jdbc.connection :as jdbc-conn]
             [next.jdbc.result-set :as rs]
             [utils :refer [->kebab-case-keyword]])
-  (:import [org.flywaydb.core Flyway]))
+  (:import [jdbc.sql DriverManager]
+           [org.flywaydb.core Flyway]))
 
 ;; TODO: Add connection pools
 (def ^:dynamic *db* (jdbc/get-datasource (config/db)))
@@ -33,6 +34,20 @@
    (jdbc/execute!
     (jdbc/with-options db {:builder-fn rs/as-unqualified-kebab-maps})
     (sql/format hsql))))
+
+(defn batch-execute!
+  "Takes a collection of SQL strings (without semicolons) `sql-strs` and commits
+  them all transactionally to `db` in a single statement"
+  [db sql-strs]
+  (jdbc/with-transaction [tx db]
+    (let [conn (jdbc/get-connection tx)
+          _ (.setAutoCommit conn false)
+          stmt (.createStatement conn)]
+      (doseq [sql-str sql-strs]
+        (.addBatch stmt sql-str))
+      (.executeBatch stmt)
+      (.commit conn)
+      (.close conn))))
 
 (comment
   (execute! *db* {:select [:*] :from [:calendar] :limit 1})
