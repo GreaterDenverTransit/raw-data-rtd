@@ -20,11 +20,11 @@
       (.cleanDisabled false)
       (.load)))
 
-(defn migrate [] (.migrate flyway))
+(defn migrate! [] (.migrate flyway))
 
-(defn clean [] (.clean flyway))
+(defn clean! [] (.clean flyway))
 
-(defn reset [] (clean) (migrate))
+(defn reset! [] (clean!) (migrate!))
 
 (defn execute!
   [db hsql]
