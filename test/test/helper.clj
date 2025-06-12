@@ -40,6 +40,6 @@
     [f]
     (binding [*db* (jdbc-conn/jdbc-url (config/db))
               test-db (jdbc/get-datasource (config/db))]
-      (db/reset)
+      (db/reset!)
       (f)
-      (db/clean))))
+      (db/clean!))))
