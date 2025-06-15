@@ -97,7 +97,7 @@
 
 (defn drop-tables!
   [conn]
-  (doseq [table ["\"Combined_Ridership_Data\"" "stops"]]
+  (doseq [table ["combined_ridership_data" "stops"]]
     (jdbc/execute! conn [(str "DROP TABLE IF EXISTS " table)])))
 
 (defn create-tables!
