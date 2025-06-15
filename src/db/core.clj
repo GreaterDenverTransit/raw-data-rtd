@@ -6,8 +6,7 @@
             [next.jdbc.connection :as jdbc-conn]
             [next.jdbc.result-set :as rs]
             [utils :refer [->kebab-case-keyword]])
-  (:import [jdbc.sql DriverManager]
-           [org.flywaydb.core Flyway]))
+  (:import [org.flywaydb.core Flyway]))
 
 ;; TODO: Add connection pools
 (def ^:dynamic *db* (jdbc/get-datasource (config/db)))
