@@ -43,4 +43,4 @@
                    :resource-paths ["resources" "test-resources"]}
   :sqlite-to-postgres {:exec-fn     sqlite-to-postgres/-main
                        :extra-paths ["scripts"]
-                       :extra-deps {org.clojure/tools.cli {:mvn/version "1.1.230"}}}}}
+                       :extra-deps  {org.clojure/tools.cli {:mvn/version "1.1.230"}}}}}
