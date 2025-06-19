@@ -11,17 +11,17 @@ CREATE TYPE IF NOT EXISTS stop_direction (
 )
 
 CREATE TABLE IF NOT EXISTS stops (
-  location_type       BOOLEAN NOT NULL,
+  location_type       BOOLEAN        NOT NULL,
   parent_station      TEXT,
-  stop_code           INTEGER NOT NULL,
-  stop_desc           TEXT    NOT NULL,
-  stop_id             INTEGER NOT NULL,
-  stop_lat            REAL    NOT NULL,
-  stop_lon            REAL    NOT NULL,
-  stop_name           TEXT    NOT NULL,
+  stop_code           INTEGER        NOT NULL,
+  stop_desc           stop_direction NOT NULL,
+  stop_id             INTEGER        NOT NULL,
+  stop_lat            REAL           NOT NULL,
+  stop_lon            REAL           NOT NULL,
+  stop_name           TEXT           NOT NULL,
   stop_timezone       BOOLEAN,
-  stop_url            TEXT    NOT NULL,
-  wheelchair_boarding BOOLEAN NOT NULL,
+  stop_url            TEXT           NOT NULL,
+  wheelchair_boarding BOOLEAN        NOT NULL,
   zone_id             TEXT,
   PRIMARY KEY(stop_id)
 );
