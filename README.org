@@ -8,6 +8,15 @@
 ** Setting up server
 ** Setting up frontend
 
+* Styles/conventions
+** DB
+*** Insertion
+Please add a new migration in the format ~Vxyz__what_migration_does.sql~ where ~xyz~ is a 3 digit incremental unique number.
+*** Tables
+Table and column names should all be ~snake_case~.
+*** Types
+Custom postgres types (e.g. enums) should be ~snake_case~ and suffixed with ~_t~.
+
 * ~TODO~
 - [ x ] h̵t̵t̵p̵s̵:̵/̵/̵g̵i̵t̵h̵u̵b̵.̵c̵o̵m̵/̵d̵o̵n̵u̵t̵-̵p̵a̵r̵t̵y̵/̵d̵a̵t̵a̵p̵o̵t̵a̵t̵o̵ ̵+̵ ̵t̵e̵s̵t̵s̵
 - [ ] ~sqlite~ -> ~PostgreSQL~
