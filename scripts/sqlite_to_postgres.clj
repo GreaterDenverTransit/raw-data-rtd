@@ -40,9 +40,24 @@
   (str "The following errors occurred while parsing your command:\n\n"
        (str/join \newline errors)))
 
-(def mapping
+(def rename-mapping
   "Mapping of dumped table names to correct table names"
   {"\"Combined_Ridership_Data\"" "combined_ridership_data"})
+
+(defn- int->bool
+  "Translates `x` into it's equivalent SQL boolean string"
+  [x]
+  (case (str x)
+    "0" "false"
+    "1" "true"
+    "NULL"))
+
+(def retype-mapping
+  "Mapping of dumped table columns to type conversion"
+  {"stops" {"wheelchair_boarding" {:idx 11
+                                   :fn  int->bool}}
+   "trips" {"direction_id" {:idx 4
+                            :fn  int->bool}}})
 
 (defn validate-args
   "Validate command line arguments. Either return a map indicating the program
@@ -98,11 +113,47 @@
 (defn rename!
   "Renames DB table names and columns to follow consistent casing"
   [{:keys [out verbose?]}]
-  (doseq [[from to] mapping]
+  (doseq [[from to] rename-mapping]
     (when verbose?
       (println "Renaming table " from " to " to))
     (let [arg (format "/%s/%s" from to)]
       (sh/sh "sed" arg out))))
+
+(defn- parse-str
+  [row idx])
+
+(defn- parse-non-str
+  [row idx])
+
+(defn- parse-column
+  "Consume one column of VALUES(col0, ..., coln), returning the column and the
+  index of the comma terminating the column, respective to the whole row"
+  [row idx]
+  ;; Can't just consume each comma since there may be commas in strings
+  (let [str? (= \' (nth row idx))]
+    (if str?
+      (parse-str row idx)
+      (parse-not-str row idx))))
+
+(defn- line?
+  "True iff `line` conforms to expected shape"
+  [line]
+  (boolean (re-matches #"INSERT INTO \w .*" line))
+  (boolean (re-matches #"INSERT INTO \W VALUES(.*);" line))
+  #_(and (str/starts-with? line "INSERT INTO")
+       (str/includes? line "VALUES(")
+       (str/ends-with? line ");")))
+
+(defn- coerce-values-column
+  "Updates column `idx` of `line` with `f`. `line-cnt` used to ensure correctness
+  with default parsing function (i.e. if # of parsed values for `line` does not
+  equal `line-cnt` then the parsing function or something else is wrong)"
+  [line line-cnt idx f]
+  ())
+
+(defn format!
+  "Adjusts DB table column values to match type changes (e.g. 0/1 -> false/true)"
+  [{:keys [out verbose?]}])
 
 (defn import!
   "Imports data from `out` into `conn`"

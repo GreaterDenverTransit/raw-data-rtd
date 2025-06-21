@@ -1,4 +1,4 @@
-CREATE TYPE IF NOT EXISTS stop_direction (
+CREATE TYPE IF NOT EXISTS stop_direction_t AS ENUM (
   'Vehicles Travelling East'
   'Vehicles Travelling North'
   'Vehicles Travelling Northeast'

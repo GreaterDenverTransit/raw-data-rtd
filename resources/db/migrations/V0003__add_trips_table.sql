@@ -1,25 +1,44 @@
--- TODO: add foreign key from route_id when routes table is added
-CREATE TABLE IF NOT EXISTS trips (
-  trip_id NOT NULL,
-  route_id NOT NULL,
-  service_id NOT NULL,
-  trip_headsign NOT NULL,
-  direction_id NOT NULL,
-  block_id NOT NULL,
-  shape_id NOT NULL,
-  first_stop NOT NULL,
-  last_stop NOT NULL,
-  start_time NOT NULL,
-  end_time NOT NULL,
-  trip_time NOT NULL,
-  time_of_day,
-  sum_boardings,
-  max_avg_load,
-  total_stops NOT NULL,
-  service_id_mod,
-
+CREATE TYPE IF NOT EXISTS service_id_t AS ENUM (
+ 'SA'
+ 'SU'
+ 'WK'
+ 'FR'
+ 'MT'
+ 'DPS'
+ 'BVSD'
+ 'DPSWK'
 );
 
+-- TODO: add foreign key from route_id when routes table is added
+CREATE TABLE IF NOT EXISTS trips (
+  block_id     TEXT NOT NULL,
+  direction_id BOOLEAN NOT NULL,
+  end_time     TIME NOT NULL,
+  first_stop   INTEGER NOT NULL REFERENCES stops(stop_id),
+  last_stop    INTEGER NOT NULL REFERENCES stops(stop_id),
+  max_avg_load INTEGER,
+  route_id     TEXT NOT NULL,
+  service_id   NOT NULL,
+  service_id_mod,
+  shape_id NOT NULL,
+  start_time   TIME NOT NULL,
+  sum_boardings,
+  time_of_day,
+  total_stops NOT NULL,
+  trip_headsign NOT NULL,
+  trip_id NOT NULL,
+  trip_time NOT NULL,
+);
+
+-- TODO consider standardizing to
+-- EB/NB/IB/CW = false and WB/SB/OB/CCW = true
+COMMENT ON COLUMN trips.direction_id IS
+  'This field is used to distinguish one direction of travel from another but is
+  not easily mapped to a direction (e.g. east/west/north/south/inbound/outbound).
+  Its primary utility comes from grouping/aggregating/filtering one direction
+  from another where identifying which direction (e.g. northbound versus southbound)
+  in results isn''t necessary. trip_headsign provides better information on this
+  but is bespoke to a given route rather than standardized to a cardinal direction.';
 
 COMMENT ON TABLE trips IS
   'time_of_day, sum_boardings, max_avg_load, and service_id_mod are all always
