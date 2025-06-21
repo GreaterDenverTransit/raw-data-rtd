@@ -40,4 +40,7 @@
                                     lambdaisland/kaocha              {:mvn/version "1.91.1392"}
                                     ;; debug/logging
                                     hashp/hashp                      {:mvn/version "0.2.2"}}
-                   :resource-paths ["resources" "test-resources"]}}}
+                   :resource-paths ["resources" "test-resources"]}
+  :sqlite-to-postgres {:exec-fn     sqlite-to-postgres/-main
+                       :extra-paths ["scripts"]
+                       :extra-deps  {org.clojure/tools.cli {:mvn/version "1.1.230"}}}}}

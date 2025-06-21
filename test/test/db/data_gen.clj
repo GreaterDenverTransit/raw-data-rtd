@@ -43,9 +43,6 @@
                        :table-name    table-name
                        :insert-result insert-result})))))
 
-;; Need bespoke way to insert elements from [[generate-potato-db]], probably need
-;; insert order
-
 (def schema
   {:combined-ridership-data
    {:fixtures  {:table-name "combined_ridership_data"}
@@ -97,7 +94,7 @@
 
 (defn drop-tables!
   [conn]
-  (doseq [table ["\"Combined_Ridership_Data\"" "stops"]]
+  (doseq [table ["combined_ridership_data" "stops"]]
     (jdbc/execute! conn [(str "DROP TABLE IF EXISTS " table)])))
 
 (defn create-tables!
