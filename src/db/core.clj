@@ -20,11 +20,11 @@
       (.cleanDisabled false)
       (.load)))
 
-(defn migrate [] (.migrate flyway))
+(defn migrate! [] (.migrate flyway))
 
-(defn clean [] (.clean flyway))
+(defn clean! [] (.clean flyway))
 
-(defn reset [] (clean) (migrate))
+(defn reset! [] (clean!) (migrate!))
 
 (defn execute!
   [db hsql]
@@ -33,6 +33,20 @@
    (jdbc/execute!
     (jdbc/with-options db {:builder-fn rs/as-unqualified-kebab-maps})
     (sql/format hsql))))
+
+(defn batch-execute!
+  "Takes a collection of SQL strings (without semicolons) `sql-strs` and commits
+  them all transactionally to `db` in a single statement"
+  [db sql-strs]
+  (jdbc/with-transaction [tx db]
+    (let [conn (jdbc/get-connection tx)
+          _ (.setAutoCommit conn false)
+          stmt (.createStatement conn)]
+      (doseq [sql-str sql-strs]
+        (.addBatch stmt sql-str))
+      (.executeBatch stmt)
+      (.commit conn)
+      (.close conn))))
 
 (comment
   (execute! *db* {:select [:*] :from [:calendar] :limit 1})
