@@ -3,6 +3,8 @@
 
 (Static GTFS Feeds) and (Ridership by Trip and Stop) for RTD network
 
+*Disclaimer:* This project is a work in progress and is still in very early phases so pretty much everything is subject to change
+
 * Getting started
 ** Setting up database
 ** Setting up server
